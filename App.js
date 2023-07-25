@@ -1,34 +1,25 @@
 // Fonction pour initialiser la carte
 function initMap() {
     // Coordonnées par défaut pour centrer la carte sur un emplacement
+    const defaultLatitude = 48.858844;
+    const defaultLongitude = 2.294351;
+
+    // Récupérer les informations de latitude, longitude et altitude (exemple)
     const latitude = 48.858844;
     const longitude = 2.294351;
+    const altitude = 100; // en mètres
 
     // Création de la carte
-    const map = L.map('map').setView([latitude, longitude], 13);
+    const map = L.map('map').setView([defaultLatitude, defaultLongitude], 13);
 
     // Chargement des tuiles de la carte (utilisation de Leaflet OpenStreetMap)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Ajout d'un marqueur à la position actuelle de l'utilisateur
-    map.locate({ setView: true, maxZoom: 16 });
-
-    function onLocationFound(e) {
-        const radius = e.accuracy / 2;
-        L.marker(e.latlng).addTo(map)
-            .bindPopup("Vous êtes dans un rayon de " + radius + " mètres de ce point").openPopup();
-        L.circle(e.latlng, radius).addTo(map);
-    }
-
-    map.on('locationfound', onLocationFound);
-
-    function onLocationError(e) {
-        alert("La localisation a échoué. Veuillez activer la géolocalisation dans votre navigateur.");
-    }
-
-    map.on('locationerror', onLocationError);
+    // Création d'un marqueur à partir des coordonnées fournies
+    const marker = L.marker([latitude, longitude]).addTo(map);
+    marker.bindPopup(`Latitude: ${latitude}<br>Longitude: ${longitude}<br>Altitude: ${altitude} m`).openPopup();
 }
 
 // Appel de la fonction d'initialisation de la carte une fois que le document est chargé
